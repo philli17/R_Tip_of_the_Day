@@ -56,7 +56,20 @@ dinos$type <- fct_inorder(dinos$type)
 - It is designed specifically to work with ggplot, so it works well with RMarkdown, Quarto and Shiny.
 :::
 
-## What can ggiraph do?
+## How does ggiraph work?
+- Each of the geometries that already exist in ggplot get an interactive version
+
+:::{.fragment .fade-in}
+- geom_point() in ggiraph is geom_point_interactive()
+- geom_bar() is geom_bar_interactive()
+- and so on...
+:::
+
+:::{.fragment .fade-in}
+- Simple and straightforward if you are familiar with ggplot
+:::
+
+## So, what can ggiraph do?
 
 ::: {.fragment .fade-in}
 ```{r}
@@ -79,7 +92,7 @@ girafe(ggobj = dinoplot)
 :::
 
 ## Scatterplot Code {auto-animate=true}
-```{.r code-line-numbers="3,4,5,6,7,9,17"}
+```{.r code-line-numbers="3,4,5,6,7,9"}
 dinoplot <- dinos |>
   ggplot() +
   geom_point_interactive(aes(x = type,
@@ -98,6 +111,12 @@ dinoplot <- dinos |>
        y = "Percentage of Answers")
 girafe(ggobj = dinoplot)
 ```
+
+## ggiraph arguments
+- There are a few arguments that can be added to the ggplot aesthetics.
+- tooltip: displays when the mouse hovers over objects
+- dataid: id asscoiated with elements
+- onclick: JavaScript function executed on click
 
 ## Another Example: NYC Flights
 
@@ -143,6 +162,63 @@ interactive_plot <- girafe(ggobj = combined_plot)
 interactive_plot
 ```
 :::
+---
+
+```{.r code-line-numbers="1,2,8,9,12"}
+mutate(name = str_glue("EWR to {dest}, ",
+"flight num {flight}"))
+
+bar <- ggplot(
+  data = flights_jan1,
+  mapping = aes(
+    x = reorder(flight, distance), y = distance,
+    tooltip = paste(name, "<br>Dist", distance, "mi"),
+    data_id = name)) +
+  geom_col_interactive(fill = "skyblue") +
+  coord_flip() +
+  labs(
+    title = "Flight Distance",
+    x = "Flight Number", y = "Flight Distance in Miles") 
+```
+
+## How to make the graph interactive
+It will not be interactive if you don't use the girafe() function
+
+The code won't fail to run or render, it will just create a regular non-interactive ggplot.
+
+:::{.fragment .fade-in}
+girafe(ggobj = ____) 
+
+Just insert the plot you've created into the space. ggobj stands for ggobject. You could also create the plot within the function.
+:::
+
+# Combining plots 
+If you want to use the interactive features for multiple graphs at once, use the patchwork package before you put the plotting code into girafe()
+
+## Multiple Plots + Interactive
+
+```{.r code-line-numbers="17,18,20"}
+bar <- ggplot(
+  data = flights_jan1,
+  mapping = aes(
+    x = reorder(flight, distance), y = distance,
+    tooltip = paste(name, "<br>Dist", distance, "mi"),
+    data_id = name
+  )
+) +
+  geom_col_interactive(fill = "skyblue") +
+  coord_flip() +
+  labs(
+    title = "Flight Distance",
+    x = "Flight Number", y = "Flight Distance in Miles"
+  ) +
+  theme_bw()
+
+combined_plot <- scatter + bar +
+  plot_layout(ncol = 2)
+
+interactive_plot <- girafe(ggobj = combined_plot)
+```
 
 ## Back to Dinosaurs
 
@@ -242,10 +318,12 @@ interactive_plot
 
 ## The Sky is the Limit with JavaScript
 
-::: {.fragment .fade-in}
+
 There are ways to add even more visuals and animations to your graphs by combining ggiraph and JavaScript
 
+::: {.fragment .fade-in}
 Including confetti!
+
 
 ```{.r}
 onclick = paste0("confetti({
@@ -259,3 +337,11 @@ onclick = paste0("confetti({
 ---
 
 ![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/Confetti-ezgif.com-optimize.gif?raw=true){fig-align="center" width="23%"}
+
+## Sources
+
+https://r-graph-gallery.com/package/ggiraph.html
+
+https://davidgohel.github.io/ggiraph/
+
+https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html
