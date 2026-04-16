@@ -339,9 +339,8 @@ onclick = paste0("confetti({
 ![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/Confetti-ezgif.com-optimize.gif?raw=true){fig-align="center" width="23%"}
 
 ## Sources
+[here](https://davidgohel.github.io/ggiraph/) is the guide to the package on github
 
 https://r-graph-gallery.com/package/ggiraph.html
-
-https://davidgohel.github.io/ggiraph/
 
 https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html
