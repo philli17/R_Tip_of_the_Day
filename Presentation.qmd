@@ -1,0 +1,35 @@
+---
+title: "R Tip of the Day: ggiraph"
+author: "Mary Phillips"
+format:
+  revealjs: 
+    theme: solarized
+    transition: fade
+    slide-number: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#|include: FALSE
+library(ggiraph)
+library(tidyverse)
+```
+
+## What is ggiraph?
+
+::: {.fragment .fade-in}
+- ![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/ggiraph_hex.png?raw=true)
+
+- [ggiraph is an extension of the ggplot package that allows you to make interactive graphs ]{style="color:darkorange1;"}
+:::
+
+::: {.fragment .fade-in}
+- It is designed specifically to work with ggplot, so it works well with RMarkdown, Quarto and Shiny.
+:::
+
+## What can ggiraph do?
+
