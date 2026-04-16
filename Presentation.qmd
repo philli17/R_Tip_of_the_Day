@@ -166,7 +166,7 @@ more_dinos$dino_answer <- fct_inorder(rev(more_dinos$dino_answer))
 ```{r}
 p1 <- ggplot(
   data = more_dinos,
-  mapping = aes(x = likes_or_loves, y = dino_answer, tooltip = likes_or_loves, data_id = dino_answer)
+  mapping = aes(x = likes_or_loves, y = dino_answer, tooltip = paste(likes_or_loves, "%"), data_id = dino_answer)
 ) +
   geom_col_interactive(
     onclick = paste0(
@@ -177,12 +177,7 @@ p1 <- ggplot(
       "tooltip.style.display = \"block\";",
       "tooltip.style.left = (event.pageX + 10) + \"px\";",
       "tooltip.style.top = (event.pageY + 10) + \"px\";",
-      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
-      "confetti({
-        particleCount: 1000,
-        spread: 70,
-        origin: { y: 0.6 }
-      });"
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);"
     )
   ) +
   labs(x = "Likes or Loves") +
@@ -193,7 +188,7 @@ p1 <- ggplot(
 
 p2 <- ggplot(
   data = more_dinos,
-  mapping = aes(x = neither_likes_nor_dislikes, y = dino_answer, tooltip = neither_likes_nor_dislikes, data_id = dino_answer)
+  mapping = aes(x = neither_likes_nor_dislikes, y = dino_answer, tooltip = paste(neither_likes_nor_dislikes, "%"), data_id = dino_answer)
 ) +
   geom_col_interactive(
     onclick = paste0(
@@ -204,12 +199,7 @@ p2 <- ggplot(
       "tooltip.style.display = \"block\";",
       "tooltip.style.left = (event.pageX + 10) + \"px\";",
       "tooltip.style.top = (event.pageY + 10) + \"px\";",
-      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
-      "confetti({
-        particleCount: 1000,
-        spread: 70,
-        origin: { y: 0.6 }
-      });"
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);"
     )
   ) +
   labs(x = "Neither Likes Nor Dislikes") +
@@ -221,7 +211,7 @@ p2 <- ggplot(
 
 p3 <- ggplot(
   data = more_dinos,
-  mapping = aes(x = uscitizen, y = dino_answer, tooltip = uscitizen, data_id = dino_answer)
+  mapping = aes(x = uscitizen, y = dino_answer, tooltip = paste(uscitizen, "%"), data_id = dino_answer)
 ) +
   geom_col_interactive(
     onclick = paste0(
@@ -232,12 +222,7 @@ p3 <- ggplot(
       "tooltip.style.display = \"block\";",
       "tooltip.style.left = (event.pageX + 10) + \"px\";",
       "tooltip.style.top = (event.pageY + 10) + \"px\";",
-      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
-      "confetti({
-        particleCount: 1000,
-        spread: 70,
-        origin: { y: 0.6 }
-      });"
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);"
     )
   ) +
   labs(x = "US Adult Citizen") +
@@ -254,3 +239,23 @@ combined_plot <- p1 + p2 + p3 +
 interactive_plot <- girafe(ggobj = combined_plot)
 interactive_plot
 ```
+
+## The Sky is the Limit with JavaScript
+
+::: {.fragment .fade-in}
+There are ways to add even more visuals and animations to your graphs by combining ggiraph and JavaScript
+
+Including confetti!
+
+```{.r}
+onclick = paste0("confetti({
+        particleCount: 1000,
+        spread: 70,
+        origin: { y: 0.6 }
+      });"
+```
+:::
+
+---
+
+![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/Confetti-ezgif.com-optimize.gif?raw=true){fig-align="center" width="23%"}
