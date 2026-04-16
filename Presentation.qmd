@@ -120,7 +120,6 @@ girafe(ggobj = dinoplot)
 
 ## Another Example: NYC Flights
 
-::: {.fragment .fade-in}
 ```{r}
 scatter <- ggplot(
   data = flights_jan1,
@@ -161,10 +160,10 @@ combined_plot <- scatter + bar +
 interactive_plot <- girafe(ggobj = combined_plot)
 interactive_plot
 ```
-:::
+
 ---
 
-```{.r code-line-numbers="1,2,8,9,12"}
+```{.r code-line-numbers="1,2,8,9,10"}
 mutate(name = str_glue("EWR to {dest}, ",
 "flight num {flight}"))
 
@@ -197,7 +196,7 @@ If you want to use the interactive features for multiple graphs at once, use the
 
 ## Multiple Plots + Interactive
 
-```{.r code-line-numbers="17,18,20"}
+```{.r code-line-numbers="1,17,18,20"}
 bar <- ggplot(
   data = flights_jan1,
   mapping = aes(
