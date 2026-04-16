@@ -47,7 +47,7 @@ dinos$type <- fct_inorder(dinos$type)
 ## What is ggiraph?
 
 ::: {.fragment .fade-in}
-- ![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/ggiraph_hex.png?raw=true)
+![](https://github.com/philli17/R_Tip_of_the_Day/blob/main/ggiraph_hex.png?raw=true)
 
 - [ggiraph is an extension of the ggplot package that allows you to make interactive graphs ]{style="color:darkorange1;"}
 :::
@@ -143,3 +143,114 @@ interactive_plot <- girafe(ggobj = combined_plot)
 interactive_plot
 ```
 :::
+
+## Back to Dinosaurs
+
+```{r}
+#|include: FALSE
+more_dinos <- tribble(
+  ~dino_answer, ~uscitizen, 	~likes_or_loves, ~neither_likes_nor_dislikes,
+"Tyrannosaurus Rex",	23.686,	28.634,	18.638,
+"Brontosaurus",	6.612,	9.659,	4.329,
+"Triceratops",	6.457,	10.828,	2.74,
+"Pterodactyl", 5.097,	7.16,	3.569,
+"Velociraptor",	4.821,	7.756,	2.402,
+"Stegosaurus",	3.709,	4.53,	3.386,
+"Brachiosaurus",	1.721,	2.864,	0.814,
+"Other",	6.31,	8.479,	4.775,
+"I don't have a favorite",	39.112,	18.746,	56.062
+)
+more_dinos$dino_answer <- fct_inorder(rev(more_dinos$dino_answer))
+```
+
+```{r}
+p1 <- ggplot(
+  data = more_dinos,
+  mapping = aes(x = likes_or_loves, y = dino_answer, tooltip = likes_or_loves, data_id = dino_answer)
+) +
+  geom_col_interactive(
+    onclick = paste0(
+      "this.style.fill = this.style.fill === \"red\" ? this.getAttribute(\"original-fill\") : \"red\";",
+      "this.classList.toggle(\"highlighted\");",
+      "var tooltip = document.getElementById(\"custom-tooltip\");",
+      "tooltip.innerHTML = \"A chart by: \" + this.getAttribute(\"data-blah\");",
+      "tooltip.style.display = \"block\";",
+      "tooltip.style.left = (event.pageX + 10) + \"px\";",
+      "tooltip.style.top = (event.pageY + 10) + \"px\";",
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
+      "confetti({
+        particleCount: 1000,
+        spread: 70,
+        origin: { y: 0.6 }
+      });"
+    )
+  ) +
+  labs(x = "Likes or Loves") +
+  theme(
+    axis.title.y = element_blank(),
+  )
+
+
+p2 <- ggplot(
+  data = more_dinos,
+  mapping = aes(x = neither_likes_nor_dislikes, y = dino_answer, tooltip = neither_likes_nor_dislikes, data_id = dino_answer)
+) +
+  geom_col_interactive(
+    onclick = paste0(
+      "this.style.fill = this.style.fill === \"red\" ? this.getAttribute(\"original-fill\") : \"red\";",
+      "this.classList.toggle(\"highlighted\");",
+      "var tooltip = document.getElementById(\"custom-tooltip\");",
+      "tooltip.innerHTML = \"A chart by: \" + this.getAttribute(\"data-blah\");",
+      "tooltip.style.display = \"block\";",
+      "tooltip.style.left = (event.pageX + 10) + \"px\";",
+      "tooltip.style.top = (event.pageY + 10) + \"px\";",
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
+      "confetti({
+        particleCount: 1000,
+        spread: 70,
+        origin: { y: 0.6 }
+      });"
+    )
+  ) +
+  labs(x = "Neither Likes Nor Dislikes") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+p3 <- ggplot(
+  data = more_dinos,
+  mapping = aes(x = uscitizen, y = dino_answer, tooltip = uscitizen, data_id = dino_answer)
+) +
+  geom_col_interactive(
+    onclick = paste0(
+      "this.style.fill = this.style.fill === \"red\" ? this.getAttribute(\"original-fill\") : \"red\";",
+      "this.classList.toggle(\"highlighted\");",
+      "var tooltip = document.getElementById(\"custom-tooltip\");",
+      "tooltip.innerHTML = \"A chart by: \" + this.getAttribute(\"data-blah\");",
+      "tooltip.style.display = \"block\";",
+      "tooltip.style.left = (event.pageX + 10) + \"px\";",
+      "tooltip.style.top = (event.pageY + 10) + \"px\";",
+      "setTimeout(function() { tooltip.style.display = \"none\"; }, 1500);",
+      "confetti({
+        particleCount: 1000,
+        spread: 70,
+        origin: { y: 0.6 }
+      });"
+    )
+  ) +
+  labs(x = "US Adult Citizen") +
+theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+
+combined_plot <- p1 + p2 + p3 +
+  plot_layout(ncol = 3)
+
+interactive_plot <- girafe(ggobj = combined_plot)
+interactive_plot
+```
