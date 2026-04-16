@@ -1,0 +1,106 @@
+---
+title: "Draft_Graphs"
+output: html_document
+date: "2026-04-16"
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+#|include: FALSE
+
+library(ggiraph)
+library(tidyverse)
+library(nycflights13)
+library(patchwork)
+
+flights <- nycflights13::flights 
+flights_jan1 <- flights |>
+  filter(origin == "EWR" & month == 1 & day == 1 & hour == 13) |>
+  mutate(name = str_glue("EWR to {dest}, ",
+                         "flight num {flight}"))
+```
+
+```{r}
+scatter <- ggplot(
+  data = flights_jan1,
+  mapping = aes(
+    x = dep_delay, y = arr_delay,
+    tooltip = name, data_id = name
+  )
+) +
+  geom_point_interactive(
+    size = 3, hover_nearest = TRUE
+  ) +
+  labs(
+    title = "Departure and Arrival Delays",
+    x = "Departure Delay (minutes)", y = "Arrival Delay (minutes)"
+  ) +
+  theme_bw()
+
+bar <- ggplot(
+  data = flights_jan1,
+  mapping = aes(
+    x = reorder(flight, distance), y = distance,
+    tooltip = paste(flight, "<br>Dist", distance, "mi"),
+    data_id = name
+  )
+) +
+  geom_col_interactive(fill = "skyblue") +
+  coord_flip() +
+  labs(
+    title = "Flight Distance",
+    x = "Flight Number", y = "Flight Distance in Miles"
+  ) +
+  theme_bw()
+
+combined_plot <- scatter + bar +
+  plot_layout(ncol = 2)
+
+interactive_plot <- girafe(ggobj = combined_plot)
+```
+
+```{r}
+flights_jan1 <- flights |>
+  filter(origin == "EWR" & month == 1 & day == 1 & hour == 13) |>
+  mutate(name = str_glue("EWR to {dest}, ",
+                         "flight num {flight}"))
+
+#busiest hour of the day
+```
+
+```{r}
+dinos <- tribble(
+  ~type, ~year, ~perc, ~unique,
+  "love", 2024, 13, "love 2024",
+  "like", 2024, 31, "like 2024",
+  "neither", 2024, 47, "neither 2024",
+  "dislike", 2024, 2, "dislike 2024",
+  "hate", 2024, 3, "hate 2024",
+  "don't know", 2024, 4, "don't know 2024",
+  "love", 2026, 17, "love 2026",
+  "like", 2026, 30, "like 2026",
+  "neither", 2026, 47, "neither 2026",
+  "dislike", 2026, 2, "dislike 2026",
+  "hate", 2026, 1, "hate 2026",
+  "don't know", 2026, 3, "don't know 2026"
+)
+dinos$type <- fct_inorder(dinos$type)
+```
+
+```{r}
+dinoplot <- dinos |>
+  ggplot() +
+  geom_point_interactive(aes(x = type,
+             y = perc,
+             color = as.factor(year),
+             tooltip = unique,
+             data_id = unique),
+    size = 3, position = "jitter", hover_nearest = TRUE) +
+  labs(title = "How much do you like dinosuars?",
+       caption = "Data from YouGov's polls, Dinosaurs
+       https://yougov.com/en-us/topics/topic/Dinosaurs",
+       color = "Year",
+       x = "How much do you Like or Dislike dinosaurs?",
+       y = "Percentage of Answers")
+girafe(ggobj = dinoplot)
+```
